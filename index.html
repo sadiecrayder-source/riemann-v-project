@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Riemann-V | Advanced Theory</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon: #00f2ff; --accent: #7000ff; --bg: #05070a; --glass: rgba(255, 255, 255, 0.03); }
+        body { background: var(--bg); color: #e6edf3; font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
+        nav { background: rgba(13, 17, 23, 0.95); padding: 1rem 5%; display: flex; justify-content: space-between; border-bottom: 1px solid #30363d; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-family: 'Orbitron'; color: var(--neon); font-weight: 800; }
+        nav a { color: white; text-decoration: none; margin-left: 20px; opacity: 0.6; font-weight: 600; }
+        nav a.active { opacity: 1; color: var(--neon); border-bottom: 2px solid var(--neon); }
+        .hero { text-align: center; padding: 100px 10%; background: radial-gradient(circle at center, #111418 0%, var(--bg) 80%); }
+        .content { padding: 50px 15%; }
+        .card { background: var(--glass); border: 1px solid #30363d; border-radius: 20px; padding: 40px; margin-bottom: 40px; }
+        .quote { font-style: italic; color: var(--neon); border-left: 4px solid var(--accent); padding: 20px; margin: 30px 0; background: rgba(112,0,255,0.05); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">RIEMANN-V // PRO</div>
+        <div>
+            <a href="index.html" class="active">LECTURE</a>
+            <a href="visualizer.html">SIMULATOR</a>
+            <a href="archives.html">ARCHIVES</a>
+            <a href="audit.html">VERIFY</a>
+        </div>
+    </nav>
+    <div class="hero">
+        <h1 style="font-family: 'Orbitron'; font-size: 3rem;">The Calculus of Accumulation</h1>
+        <p>A Professional Deep-Dive into Riemann Summation and Definite Integrals.</p>
+    </div>
+    <div class="content">
+        <div class="quote">"Mathematics is the most beautiful and most powerful creation of the human spirit." — Stefan Banach</div>
+        <div class="card">
+            <h2>Fundamental Theorem & The Sum</h2>
+            <p>To find the exact area under a curve \( f(x) \), we use the limit of the Riemann Sum:</p>
+            <div style="font-size: 2rem; text-align: center; margin: 40px 0; color: var(--neon);">
+                \[ \int_{a}^{b} f(x) \, dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^*) \Delta x \]
+            </div>
+            <p><b>Fun Fact:</b> The "dx" in an integral is actually the limit of \(\Delta x\), representing an infinitely thin width!</p>
+        </div>
+        <div style="height: 400px;"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Riemann-V | Simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Inter&display=swap" rel="stylesheet">
+    <style>
+        body { background: #05070a; color: white; font-family: 'Inter'; margin: 0; }
+        nav { background: #0d1117; padding: 1rem 5%; display: flex; justify-content: space-between; border-bottom: 1px solid #333; }
+        nav a { color: white; text-decoration: none; margin-left: 20px; opacity: 0.6; }
+        nav a.active { opacity: 1; color: #00f2ff; border-bottom: 2px solid #00f2ff; }
+        .layout { display: grid; grid-template-columns: 350px 1fr; gap: 30px; padding: 50px; }
+        .controls { background: #0d1117; padding: 30px; border-radius: 20px; border: 1px solid #333; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; color: white; border: 1px solid #444; border-radius: 8px; }
+        #chartWrapper { background: #0d1117; padding: 20px; border-radius: 20px; border: 1px solid #333; height: 500px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="font-family: 'Orbitron'; color: #00f2ff;">RIEMANN-V</div>
+        <div>
+            <a href="index.html">LECTURE</a>
+            <a href="visualizer.html" class="active">SIMULATOR</a>
+            <a href="archives.html">ARCHIVES</a>
+            <a href="audit.html">VERIFY</a>
+        </div>
+    </nav>
+    <div class="layout">
+        <div class="controls">
+            <h3>Parameters</h3>
+            <label>Function f(x):</label>
+            <input type="text" id="funcInput" value="x^2 + 2">
+            <label>Partitions (n): <span id="nVal">20</span></label>
+            <input type="range" id="nSlider" min="1" max="100" value="20">
+            <label>Method:</label>
+            <select id="sumType">
+                <option value="left">Left Sum</option>
+                <option value="right">Right Sum</option>
+                <option value="mid">Midpoint</option>
+            </select>
+            <div style="margin-top:20px; padding:20px; background:rgba(0,242,255,0.1); border-radius:10px;">
+                <small>AREA APPROXIMATION:</small>
+                <div id="areaResult" style="font-size: 2rem; color: #00f2ff;">0.0000</div>
+            </div>
+        </div>
+        <div id="chartWrapper"><canvas id="riemannChart"></canvas></div>
+    </div>
+    <script>
+        let chart;
+        function update() {
+            const expr = document.getElementById('funcInput').value;
+            const n = parseInt(document.getElementById('nSlider').value);
+            const type = document.getElementById('sumType').value;
+            document.getElementById('nVal').innerText = n;
+            const a = 0, b = 4, dx = (b-a)/n;
+            let area = 0, labels = [], curve = [], rects = [];
+            for (let x=a; x<=b; x+=0.1) { labels.push(x.toFixed(1)); curve.push(math.evaluate(expr, {x:x})); }
+            for (let i=0; i<n; i++) {
+                let xV = (type==='left') ? a+i*dx : (type==='right') ? a+(i+1)*dx : a+(i+0.5)*dx;
+                let h = math.evaluate(expr, {x:xV});
+                area += h*dx;
+                rects.push({x: a+i*dx, y:h});
+            }
+            document.getElementById('areaResult').innerText = area.toFixed(4);
+            const ctx = document.getElementById('riemannChart').getContext('2d');
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{ label: 'f(x)', data: curve, borderColor: '#00f2ff', pointRadius: 0 },
+                    { label: 'Rectangles', data: labels.map(l => {
+                        let x = parseFloat(l);
+                        let bin = Math.floor((x-a)/dx);
+                        return rects[bin] ? rects[bin].y : 0;
+                    }), type: 'bar', backgroundColor: 'rgba(112,0,255,0.3)', barPercentage: 1, categoryPercentage: 1 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+        document.getElementById('nSlider').oninput = update;
+        document.getElementById('funcInput').oninput = update;
+        document.getElementById('sumType').onchange = update;
+        update();
+    </script>
+</body>
+</html>
